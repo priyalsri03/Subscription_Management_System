@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Subscription Management Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Subscription Management Dashboard</h1>
+    <h3>Welcome, {{ name }}!</h3>
+    <p>Role: {{ role }}</p>
+
+    <hr>
+
+    <h2>Business Overview</h2>
+
+    <div class="dashboard-stats">
+
+        <div class="product-card">
+            <h3>Total Products</h3>
+            <h2>{{ data.total_products }}</h2>
+        </div>
+
+        <div class="product-card">
+            <h3>Total Plans</h3>
+            <h2>{{ data.total_plans }}</h2>
+        </div>
+
+        <div class="product-card">
+            <h3>Active Subscriptions</h3>
+            <h2>{{ data.active_subscriptions }}</h2>
+        </div>
+
+        <div class="product-card">
+            <h3>Revenue Received</h3>
+            <h2>₹{{ "%.2f"|format(data.revenue_received) }}</h2>
+        </div>
+
+        <div class="product-card">
+            <h3>Outstanding Amount</h3>
+            <h2>₹{{ "%.2f"|format(data.outstanding_amount) }}</h2>
+        </div>
+
+        <div class="product-card">
+            <h3>Total Invoices</h3>
+            <h2>{{ data.total_invoices }}</h2>
+        </div>
+
+    </div>
+
+    <hr>
+
+    <h2>Management Sections</h2>
+
+    <p><a href="{{ url_for('products.product_list') }}">Manage Products</a></p>
+    <p><a href="{{ url_for('plans.plan_list') }}">Manage Plans</a></p>
+    <p><a href="{{ url_for('discounts.discount_list') }}">Manage Discounts</a></p>
+
+    <p><a href="{{ url_for('auth.logout') }}">Logout</a></p>
+
+</div>
+
+</body>
+</html>

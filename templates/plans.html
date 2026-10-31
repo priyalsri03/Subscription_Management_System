@@ -1,0 +1,116 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Plan Management</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>Subscription Plan Management</h1>
+    <p>Create and manage subscription plans.</p>
+
+    <a href="{{ url_for('dashboard') }}">Back to Dashboard</a>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <hr>
+
+    <h2>Create New Plan</h2>
+
+    <form action="{{ url_for('plans.add_plan') }}" method="POST">
+
+        <input type="text" name="name"
+               placeholder="Plan Name (e.g. Premium Monthly)" required>
+
+        <label>Billing Cycle</label>
+        <select name="billing_cycle" required>
+            <option value="">Select Billing Cycle</option>
+            <option value="Daily">Daily</option>
+            <option value="Weekly">Weekly</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Yearly">Yearly</option>
+        </select>
+
+        <input type="number" name="minimum_quantity"
+               placeholder="Minimum Quantity" min="1" value="1" required>
+
+        <label>Availability Start Date</label>
+        <input type="date" name="start_date">
+
+        <label>Availability End Date</label>
+        <input type="date" name="end_date">
+
+        <button type="submit">Create Plan</button>
+
+    </form>
+
+    <hr>
+
+    <h2>All Subscription Plans</h2>
+
+    {% for plan in plans %}
+
+    <div class="product-card">
+
+        <h3>{{ plan['name'] }}</h3>
+        <p>Billing Cycle: {{ plan['billing_cycle'] }}</p>
+        <p>Minimum Quantity: {{ plan['minimum_quantity'] }}</p>
+        <p>Start Date: {{ plan['start_date'] or 'Not specified' }}</p>
+        <p>End Date: {{ plan['end_date'] or 'Not specified' }}</p>
+
+        <h4>Edit Plan</h4>
+
+        <form action="{{ url_for('plans.edit_plan', plan_id=plan['id']) }}"
+              method="POST">
+
+            <input type="text" name="name"
+                   value="{{ plan['name'] }}" required>
+
+            <select name="billing_cycle" required>
+                <option value="Daily" {% if plan['billing_cycle'] == 'Daily' %}selected{% endif %}>Daily</option>
+                <option value="Weekly" {% if plan['billing_cycle'] == 'Weekly' %}selected{% endif %}>Weekly</option>
+                <option value="Monthly" {% if plan['billing_cycle'] == 'Monthly' %}selected{% endif %}>Monthly</option>
+                <option value="Yearly" {% if plan['billing_cycle'] == 'Yearly' %}selected{% endif %}>Yearly</option>
+            </select>
+
+            <input type="number" name="minimum_quantity"
+                   value="{{ plan['minimum_quantity'] }}"
+                   min="1" required>
+
+            <label>Start Date</label>
+            <input type="date" name="start_date"
+                   value="{{ plan['start_date'] or '' }}">
+
+            <label>End Date</label>
+            <input type="date" name="end_date"
+                   value="{{ plan['end_date'] or '' }}">
+
+            <button type="submit">Update Plan</button>
+        </form>
+
+        <form action="{{ url_for('plans.delete_plan', plan_id=plan['id']) }}"
+              method="POST"
+              onsubmit="return confirm('Delete this plan?');">
+
+            <button type="submit">Delete Plan</button>
+        </form>
+
+    </div>
+
+    <hr>
+
+    {% else %}
+        <p>No subscription plans created yet.</p>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>
