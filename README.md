@@ -40,4 +40,4 @@ Subscription_manager/
 - Piyush Singh
 
 ## Project Status
-Development in progress. Additional subscription, quotation, invoice, and payment management modules are being integrated.
+Development in progress. Additional subscription, quotation, invoice, and payment management modules are being integrated.   
