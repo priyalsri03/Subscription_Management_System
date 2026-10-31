@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SaaS Subscription Management</title>
+    <link rel="stylesheet" href="static/css/styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <span class="logo-icon">⚙️</span>
+                    <span class="logo-text">SubManage</span>
+                </div>
+                <div class="user-info">
+                    <span class="user-role">Admin</span>
+                </div>
+            </div>
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a href="#" data-page="overview" class="nav-link active">
+                            <span class="nav-icon">📊</span>
+                            <span class="nav-text">Overview</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" data-page="quotations" class="nav-link">
+                            <span class="nav-icon">📄</span>
+                            <span class="nav-text">Quotations</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" data-page="subscriptions" class="nav-link">
+                            <span class="nav-icon">🔄</span>
+                            <span class="nav-text">Subscriptions</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" data-page="invoices" class="nav-link">
+                            <span class="nav-icon">🧾</span>
+                            <span class="nav-text">Invoices</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" data-page="payments" class="nav-link">
+                            <span class="nav-icon">💰</span>
+                            <span class="nav-text">Payments</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="content-header">
+                <h1 class="page-title" id="page-title">Dashboard</h1>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" id="refresh-btn">🔄 Refresh</button>
+                </div>
+            </header>
+
+            <!-- Page Content Container -->
+            <div id="page-content" class="page-content">
+                <!-- Overview Page -->
+                <section id="overview-page" class="page-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">📈</span>
+                                <h3 class="stat-title">Total Subscriptions</h3>
+                            </div>
+                            <div class="stat-value" id="stat-total-subs">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">✅</span>
+                                <h3 class="stat-title">Active Subscriptions</h3>
+                            </div>
+                            <div class="stat-value" id="stat-active-subs">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">🧾</span>
+                                <h3 class="stat-title">Total Invoices</h3>
+                            </div>
+                            <div class="stat-value" id="stat-total-inv">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">⏳</span>
+                                <h3 class="stat-title">Pending Payments</h3>
+                            </div>
+                            <div class="stat-value" id="stat-pending">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">⚠️</span>
+                                <h3 class="stat-title">Overdue Invoices</h3>
+                            </div>
+                            <div class="stat-value" id="stat-overdue">0</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-header">
+                                <span class="stat-icon">💰</span>
+                                <h3 class="stat-title">Total Revenue</h3>
+                            </div>
+                            <div class="stat-value" id="stat-revenue">₹0</div>
+                        </div>
+                    </div>
+
+                    <div class="grid-container">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Recent Invoices</h2>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Customer</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                            <th>Due Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-invoices">
+                                        <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h2 class="card-title">Recent Payments</h2>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>Invoice</th>
+                                            <th>Amount</th>
+                                            <th>Method</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="recent-payments">
+                                        <tr><td colspan="4" class="empty-state">Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quotations Page -->
+                <section id="quotations-page" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Quotation Templates</h2>
+                            <button class="btn btn-primary" id="create-quotation-btn">
+                                <span class="btn-icon">+</span> Create Quotation
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-actions">
+                                <input type="text" class="search-input" placeholder="Search quotations..." id="search-quotations">
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Plan</th>
+                                        <th>Validity (Days)</th>
+                                        <th>Lines</th>
+                                        <th>Created</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="quotations-list">
+                                    <tr><td colspan="7" class="empty-state">No quotations found</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create/Edit Quotation Modal -->
+                <div id="quotation-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="quotation-modal-title">Create Quotation Template</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-quotation-form">
+                                <input type="hidden" id="edit-quotation-id">
+                                <div class="form-group">
+                                    <label for="quotation-name">Quotation Name</label>
+                                    <input type="text" id="quotation-name" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quotation-plan">Plan</label>
+                                    <select id="quotation-plan" class="form-select" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="quotation-validity">Validity Period (Days)</label>
+                                    <input type="number" id="quotation-validity" class="form-input" value="30" min="1">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary modal-cancel">Cancel</button>
+                            <button class="btn btn-primary" id="save-quotation-btn">Create</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscriptions Page -->
+                <section id="subscriptions-page" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Subscriptions</h2>
+                            <button class="btn btn-primary" id="create-subscription-btn">
+                                <span class="btn-icon">+</span> Create Subscription
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-actions">
+                                <input type="text" class="search-input" placeholder="Search subscriptions..." id="search-subscriptions">
+                                <select class="form-select" id="status-filter-subscriptions">
+                                    <option value="">All Statuses</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="quotation">Quotation</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="active">Active</option>
+                                    <option value="closed">Closed</option>
+                                </select>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Number</th>
+                                        <th>Customer</th>
+                                        <th>Plan</th>
+                                        <th>Status</th>
+                                        <th>Start Date</th>
+                                        <th>Expiry</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subscriptions-list">
+                                    <tr><td colspan="7" class="empty-state">No subscriptions found</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Subscription Modal -->
+                <div id="subscription-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Create Subscription</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-subscription-form">
+                                <div class="form-group">
+                                    <label for="sub-customer">Customer</label>
+                                    <select id="sub-customer" class="form-select" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sub-plan">Plan</label>
+                                    <select id="sub-plan" class="form-select" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sub-start-date">Start Date</label>
+                                    <input type="date" id="sub-start-date" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="sub-terms">Payment Terms</label>
+                                    <input type="text" id="sub-terms" class="form-input" placeholder="net_15, net_30">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary modal-cancel">Cancel</button>
+                            <button class="btn btn-primary" id="save-subscription-btn">Create</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Subscriptions Detail Modal -->
+                <div id="subscription-detail-modal" class="modal" style="display: none;">
+                    <div class="modal-content modal-large">
+                        <div class="modal-header">
+                            <h3 id="sub-detail-title">Subscription Details</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="subscription-detail-content">
+                                <div class="empty-state">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoices Page -->
+                <section id="invoices-page" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Invoices</h2>
+                            <button class="btn btn-primary" id="create-invoice-btn">
+                                <span class="btn-icon">+</span> Generate Invoice
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-actions">
+                                <input type="text" class="search-input" placeholder="Search invoices..." id="search-invoices">
+                                <select class="form-select" id="status-filter-invoices">
+                                    <option value="">All Statuses</option>
+                                    <option value="draft">Draft</option>
+                                    <option value="confirmed">Confirmed</option>
+                                    <option value="paid">Paid</option>
+                                    <option value="cancelled">Cancelled</option>
+                                </select>
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Customer</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                        <th>Issue Date</th>
+                                        <th>Due Date</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="invoices-list">
+                                    <tr><td colspan="7" class="empty-state">No invoices found</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Invoice Modal -->
+                <div id="invoice-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Generate Invoice</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-invoice-form">
+                                <div class="form-group">
+                                    <label for="invoice-subscription">Subscription</label>
+                                    <select id="invoice-subscription" class="form-select" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-period-start">Period Start</label>
+                                    <input type="date" id="invoice-period-start" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-period-end">Period End</label>
+                                    <input type="date" id="invoice-period-end" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-issue-date">Issue Date</label>
+                                    <input type="date" id="invoice-issue-date" class="form-input">
+                                </div>
+                                <div class="form-group">
+                                    <label for="invoice-due-date">Due Date</label>
+                                    <input type="date" id="invoice-due-date" class="form-input">
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary modal-cancel">Cancel</button>
+                            <button class="btn btn-primary" id="save-invoice-btn">Generate</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Invoice Detail Modal -->
+                <div id="invoice-detail-modal" class="modal" style="display: none;">
+                    <div class="modal-content modal-large">
+                        <div class="modal-header">
+                            <h3 id="invoice-detail-title">Invoice Details</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div id="invoice-detail-content">
+                                <div class="empty-state">Loading...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payments Page -->
+                <section id="payments-page" class="page-section">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">Payments</h2>
+                            <button class="btn btn-primary" id="create-payment-btn">
+                                <span class="btn-icon">+</span> Record Payment
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-actions">
+                                <input type="text" class="search-input" placeholder="Search payments..." id="search-payments">
+                            </div>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Invoice #</th>
+                                        <th>Amount</th>
+                                        <th>Method</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="payments-list">
+                                    <tr><td colspan="5" class="empty-state">No payments found</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Create Payment Modal -->
+                <div id="payment-modal" class="modal" style="display: none;">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3>Record Payment</h3>
+                            <button class="modal-close">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="create-payment-form">
+                                <div class="form-group">
+                                    <label for="payment-invoice">Invoice</label>
+                                    <select id="payment-invoice" class="form-select" required></select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-amount">Amount</label>
+                                    <input type="number" id="payment-amount" class="form-input" step="0.01" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-method">Payment Method</label>
+                                    <select id="payment-method" class="form-select" required>
+                                        <option value="">Select method</option>
+                                        <option value="Bank Transfer">Bank Transfer</option>
+                                        <option value="Credit Card">Credit Card</option>
+                                        <option value="PayPal">PayPal</option>
+                                        <option value="Cash">Cash</option>
+                                        <option value="Check">Check</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-date">Paid On</label>
+                                    <input type="date" id="payment-date" class="form-input" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="payment-note">Note (Optional)</label>
+                                    <textarea id="payment-note" class="form-textarea"></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary modal-cancel">Cancel</button>
+                            <button class="btn btn-primary" id="save-payment-btn">Record Payment</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="static/js/app.js"></script>
+</body>
+</html>
